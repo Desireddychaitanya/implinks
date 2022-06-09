@@ -1,0 +1,69 @@
+#!/bin/bash
+ 
+read -p "Enter First Numeric Value: " first
+read -p "Enter Second Numeric Value: " second
+ 
+if [ $first -le 10 ] || [ $second -gt 20 ]
+then
+    echo "Atleast one conditions is true"
+else
+    echo "Both conditions are failed"
+fi
+
+
+#!/bin/bash
+
+read -p "enter"
+
+FROM amazoncorretto:11-alpine-jdk
+MAINTAINER baeldung.com
+COPY target/docker-message-server-1.0.0.jar message-server-1.0.0.jar
+ENTRYPOINT ["java","-jar","/message-server-1.0.0.jar"]
+
+
+FROM amazoncorretto:11-alpine-jdk
+MAINTAINER chaitanya chaitanyadesireddy1@gmail.com
+copy target/docker-message-server-1.0.0.jar message-server-1.0.0.jar
+entrypoint ["java","-jar","/message-server-1.0.0.jar"]
+
+
+
+
+FROM openjdk:8
+ADD target/my-maven-docker-project.jar my-maven-docker-project.jar
+ENTRYPOINT ["java", "-jar","my-maven-docker-project.jar"]
+EXPOSE 8080
+
+
+
+FROM openjdk:8
+
+
+
+
+
+
+
+
+
+FROM maven:3.5.2-jdk-9 AS build
+COPY src /usr/src/app/src
+COPY pom.xml /usr/src/app
+RUN mvn -f /usr/src/app/pom.xml clean package
+
+FROM openjdk:9
+COPY --from=build /usr/src/app/target/flighttracker-1.0.0-SNAPSHOT.jar /usr/app/flighttracker-1.0.0-SNAPSHOT.jar 
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/usr/app/flighttracker-1.0.0-SNAPSHOT.jar"]
+
+FROM maven:3.5.2-jdk-9 AS build
+COPY src /usr/src/app/src
+COPY pom.xm /usr/src/app
+RUN mvn -f /usr/src/app/pom.xml clean package
+
+FROM openjdk:9
+COPY --from=build /usr/src/app/target/flighttracker-1.0.0-snapshot.jar /usr/app/flighttracker-1.0.0-snapshot.jar
+expose 8080
+ENTRYPOINT ["java","-jar","/usr/app/flighttracker-1.0.0-snapshot.jar"]
+
+
